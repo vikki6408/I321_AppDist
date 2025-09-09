@@ -1,9 +1,9 @@
 // routes/router.js
 const express = require('express');
-const productsRouter = require('./products');
+const productsRouter = require('./pizzas');
 
 const router = express.Router();
 
-router.use('/products', productsRouter);
+router.use('/pizzas', productsRouter);
 
 module.exports = router;

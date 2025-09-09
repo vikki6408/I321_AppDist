@@ -15,7 +15,7 @@ const db = new sqlite3.Database(dbFile, (err) => {
 
 // Initialize products table if not exists
 const initSql = `
-CREATE TABLE IF NOT EXISTS products (
+CREATE TABLE IF NOT EXISTS pizzas (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   description TEXT,
