@@ -1,6 +1,6 @@
 // controllers/pizzaController.js
 const { validationResult } = require('express-validator');
-const Ingredient = require('IngredientEntity');
+const Ingredient = require('./IngredientEntity');
 
 /**
  * Controller functions use Express (req, res) signatures and
