@@ -38,7 +38,7 @@ A simple RESTful API to manage products (CRUD) built with **Express**, **SQLite3
     │       pizzaController.js
     │
     ├───entities
-    │       Pizza.js
+    │       pizza.js
     │
     └───routes
             pizzas.js

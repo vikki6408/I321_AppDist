@@ -3,6 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 require('dotenv').config();
 
+
 const dbFile = process.env.DB_FILE || path.join(__dirname, '..', 'dev.sqlite');
 
 const db = new sqlite3.Database(dbFile, (err) => {
@@ -13,18 +14,21 @@ const db = new sqlite3.Database(dbFile, (err) => {
     console.log('Connected to sqlite database:', dbFile);
 });
 
-// Initialize products table if not exists
+
+
+// Initialize pizzas table if not exists
 const initSql = `
-CREATE TABLE IF NOT EXISTS pizzas (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  description TEXT,
-  imageUrl TEXT,
-  price REAL NOT NULL,
-  created_at TEXT DEFAULT (datetime('now')),
-  updated_at TEXT DEFAULT (datetime('now'))
-);
-`;
+    CREATE TABLE IF NOT EXISTS pizzas (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      ingredients TEXT NOT NULL,
+      imageUrl TEXT,
+      price REAL NOT NULL,
+      created_at TEXT DEFAULT (datetime('now')),
+      updated_at TEXT DEFAULT (datetime('now'))
+    )`;
+
+
 
 db.serialize(() => {
     db.run(initSql, (err) => {
@@ -34,5 +38,6 @@ db.serialize(() => {
         }
     });
 });
+
 
 module.exports = db;
