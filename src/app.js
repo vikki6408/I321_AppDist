@@ -3,7 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const router = require('./routes/router');
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('./pizza/swagger');
+const swaggerSpec = require('./config/swagger');
 
 const app = express();
 

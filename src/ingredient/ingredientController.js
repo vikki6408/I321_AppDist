@@ -84,3 +84,18 @@ exports.delete = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.validateIngredients = async (req, res, next) => {
+    try {
+        for (const ingredient of ingredient) {}
+            const ingredient = Number(req.params.ingredients);
+            const ingredients = await Ingredient.findAllByIds(ingredient);
+        if (!ingredient) return res.status(404).json({ error: 'Product not found' });
+        // 200 OK
+        return res.status(200).json(ingredients);
+    } catch (err) {
+        //next(err);
+    }
+};
+
+

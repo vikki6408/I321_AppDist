@@ -1,5 +1,5 @@
 // entities/pizza.js
-const db = require('./database');
+const db = require('../config/database');
 
 class Ingredient {
     static create({ name, price }) {
@@ -34,6 +34,19 @@ class Ingredient {
                 resolve(row || null);
             });
         });
+    }
+
+
+    static findAllByIds(ingredient) {
+        for (const ingredient of ingredient) {
+            const sql = `SELECT * FROM pizzas WHERE id = ?`;
+            return new Promise((resolve, reject) => {
+                db.get(sql, [id], (err, row) => {
+                    if (err) return reject(err);
+                    resolve(row || null);
+                });
+            });
+        }
     }
 
     static update(id, { name, price }) {

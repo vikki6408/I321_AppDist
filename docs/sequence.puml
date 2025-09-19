@@ -1,0 +1,33 @@
+@startuml
+actor Client
+' The only difference between actor
+'and participant is the drawing
+participant "Global Router\n(index.js)" as gRouter
+participant "Pizzas Router\n(pizzas.js)" as pRouter
+participant "Controller\n(pizzas.js)" as pController
+participant "Entity\n(Pizzas (Sequelize))" as Entity
+database "MySQL DB" as db
+
+== Pizzas Creation Flow ==
+
+Client -> gRouter : POST /api/v1/pizzas
+gRouter -> pRouter : Delegates to /pizzas routes
+pRouter -> pController : createPizza(req)
+pController -> Entity : Pizza.create({name, price, category})
+
+
+alt Validation error
+    Entity --> pController : SequelizeValidationError
+    pController --> Client : 400 Bad Request + validation messages
+    else Success
+        Entity -> db : INSERT INTO pizzas (name, price, category)\n VALUES (...)
+        db --> Entity : Ack (row inserted)
+        Entity --> pController : Success
+        pController --> Client : 200 OK + {"success":true, "message":"Pizza created successfully"}
+end
+
+== Error Case ==
+
+pController --> Client : 500 Internal Server Error (unexpected)
+
+@enduml

@@ -1,6 +1,7 @@
 // controllers/pizzaController.js
 const { validationResult } = require('express-validator');
 const Pizza = require('./PizzaEntity');
+const { validateIngredients } = require("../ingredient/ingredientController");
 
 /**
  * Controller functions use Express (req, res) signatures and
@@ -19,6 +20,8 @@ exports.create = async (req, res, next) => {
         }
 
         const { name, ingredients, imageUrl, price } = req.body;
+        const validation = validateIngredients(ingredients);
+
         const created = await Pizza.create({ name, ingredients, imageUrl, price });
         // 201 Created
         return res.status(201).json(created);
