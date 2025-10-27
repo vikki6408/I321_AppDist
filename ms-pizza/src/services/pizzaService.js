@@ -58,7 +58,7 @@ const PizzaService = {
     },
 
     async getCompositions(pizzaId) {
-        return PizzaEntity.findCompositions(pizzaId);
+        return PizzaEntity.findCompositions(pizzaId);   // retourne le nom de l'ingredient aussi -> construire un dialogue avec car besoin du libelle et de l areponse
     },
 
     async deleteCompositions(id) {

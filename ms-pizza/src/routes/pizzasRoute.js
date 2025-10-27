@@ -192,6 +192,7 @@ const router = express.Router();
  *         description: All compositions successfully deleted
  *       404:
  *         description: Pizza or composition not found
+ *
  */
 
 /**
@@ -221,6 +222,6 @@ router.get('/:id/full', [param('id').isInt()], pizzaController.getPizzaWithIngre
 router.get('/:id/compositions',[param('id').isInt()], pizzaController.getCompositions);
 router.post('/:id/compositions', createAndUpdateValidationsCompositions, pizzaController.addComposition);
 router.delete('/:id/compositions', [param('id').isInt()], pizzaController.deleteCompositions);
-
+// PUT
 
 module.exports = router;

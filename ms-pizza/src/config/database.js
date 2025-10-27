@@ -84,6 +84,8 @@ db.serialize(() => {
             return;
         }
 
+        // ---- Composition ----
+
         if (row.count === 0) {
             console.log('Seeding pizza_compositions...');
             const stmt = db.prepare(`
@@ -91,9 +93,11 @@ db.serialize(() => {
             VALUES (?, ?)
         `);
 
+            // compositions => la pizza 1 va avoir les ingredients 1, 2
             stmt.run(1, 1);
             stmt.run(1, 2);
 
+            // la pizza 2 les 1, 2, 3 (pizzaId, ingredientId)
             stmt.run(2, 1);
             stmt.run(2, 2);
             stmt.run(2, 3);

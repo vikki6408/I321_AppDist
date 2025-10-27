@@ -40,7 +40,7 @@ db.serialize(() => {
             return;
         }
 
-        if (row.count === 0) {
+        if (row.count === 0) { // du moment qu'il trouve qqch dedans la bd n'est pas iniatlisée
             console.log('Seeding ingredients...');
 
             const seedData = [
