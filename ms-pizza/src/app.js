@@ -1,9 +1,9 @@
 // app.js
 const express = require('express');
 const morgan = require('morgan');
-const router = require('../ms-pizza/src/routes/pizzasRoute');
+const router = require('./routes/pizzasRoute');
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpec = require('../ms-pizza/src/config/swagger');
+const swaggerSpec = require('./config/swagger');
 
 const app = express();
 
@@ -11,7 +11,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 // API routes
-app.use('/api', router);
+app.use('/api/v1', router);
 
 // Swagger UI
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));

@@ -21,7 +21,7 @@ const Pizza = {
     },
 
     insert(pizza) {
-        const { name, ingredients, imageUrl, price } = pizza;
+        const { name, imageUrl, price } = pizza;
         return new Promise((resolve, reject) => {
             db.run(
                 `INSERT INTO pizzas (name, imageUrl, price) VALUES (?, ?, ?)`,
@@ -35,7 +35,7 @@ const Pizza = {
     },
 
     update(id, pizza) {
-        const { name, ingredients, imageUrl, price } = pizza;
+        const { name, imageUrl, price } = pizza;
         return new Promise((resolve, reject) => {
             db.run(
                 `UPDATE pizzas SET name = ?, imageUrl = ?, price = ?, updated_at = datetime('now') WHERE id = ?`,
@@ -64,7 +64,7 @@ const Pizza = {
     findCompositions(pizzaId) {
         return new Promise((resolve, reject) => {
             db.all(
-                'SELECT * FROM pizzas_compositions WHERE pizza_id = ?',
+                'SELECT * FROM pizza_compositions WHERE pizza_id = ?',
                 [pizzaId],
                 (err, rows) => {
                     if (err) reject(err);
@@ -77,7 +77,7 @@ const Pizza = {
     insertComposition(pizzaId, ingredientId) {
         return new Promise((resolve, reject) => {
             db.run(
-                `INSERT INTO pizzas_compositions (pizza_id, ingredient_id)
+                `INSERT INTO pizza_compositions (pizza_id, ingredient_id)
          VALUES (?, ?, ?, ?)`,
                 [pizzaId, ingredientId],
                 function (err) {
@@ -91,7 +91,7 @@ const Pizza = {
     deleteCompositions(id) {
         return new Promise((resolve, reject) => {
             db.run(
-                'DELETE FROM pizzas_compositions WHERE id = ?',
+                'DELETE FROM pizza_compositions WHERE id = ?',
                 [id],
                 function (err) {
                     if (err) reject(err);

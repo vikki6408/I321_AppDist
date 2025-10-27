@@ -6,13 +6,31 @@ const pizzaController = require('../controllers/pizzaController');
 const router = express.Router();
 
 /**
+ * @swagger
+ * components:
+ *   schemas:
+ *     PizzaComposition:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         pizza_id:
+ *           type: integer
+ *           example: 1
+ *         ingredient_id:
+ *           type: integer
+ *           example: 2
+ */
+
+/**
  * @openapi
- * /api/pizzas:
+ * /pizzas:
  *   get:
  *     summary: Retrieve a list of pizzas
  *     responses:
  *       200:
- *         description: A list of pizzas
+ *         description: A list of pizza
  *   post:
  *     summary: Create a new pizza
  *     requestBody:
@@ -27,22 +45,18 @@ const router = express.Router();
  *             properties:
  *               name:
  *                 type: string
- *               description:
- *                 type: string
- *               imageUrl:
- *                 type: string
  *               price:
  *                 type: number
  *     responses:
  *       201:
- *         description: pizza created
+ *         description: Product item
  *       400:
  *         description: Invalid input
  */
 
 /**
  * @openapi
- * /api/pizzas/{id}:
+ * /pizzas/{id}:
  *   get:
  *     summary: Get a pizza by ID
  *     parameters:
@@ -53,9 +67,9 @@ const router = express.Router();
  *           type: integer
  *     responses:
  *       200:
- *         description: A single pizza
+ *         description: A single product
  *       404:
- *         description: pizza not found
+ *         description: Product not found
  *   put:
  *     summary: Update a pizza by ID
  *     parameters:
@@ -73,21 +87,17 @@ const router = express.Router();
  *             properties:
  *               name:
  *                 type: string
- *               description:
- *                 type: string
- *               imageUrl:
- *                 type: string
  *               price:
  *                 type: number
  *     responses:
  *       200:
- *         description: pizza updated
+ *         description: Pizza updated
  *       400:
  *         description: Invalid input
  *       404:
- *         description: pizza not found
+ *         description: Pizzas not found
  *   delete:
- *     summary: Delete a pizza by ID
+ *     summary: Delete a Pizza by ID
  *     parameters:
  *       - in: path
  *         name: id
@@ -96,9 +106,88 @@ const router = express.Router();
  *           type: integer
  *     responses:
  *       204:
- *         description: pizza deleted
+ *         description: Pizza deleted
  *       404:
- *         description: pizza not found
+ *         description: Pizza not found
+ */
+
+/**
+ * @openapi
+ * /pizzas/{id}/compositions:
+ *   get:
+ *     summary: Get all composition items for a pizza
+ *     tags: [Compositions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Product ID
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     responses:
+ *       '200':
+ *         description: Array of product compositions
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/ProductComposition'
+ *       '404':
+ *         description: Product not found
+ *
+ *   post:
+ *     summary: Add a composition item to a product
+ *     tags: [Compositions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the product to which the composition is added
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               item_id:
+ *                 type: integer
+ *                 description: The ID of the product item to associate
+ *                 example: 2
+ *     responses:
+ *       201:
+ *         description: Composition successfully added
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProductComposition'
+ *       400:
+ *         description: Validation error or missing data
+ *       404:
+ *         description: Product or item not found
+ *
+ *
+ *   delete:
+ *     summary: Delete all composition items for a specific product
+ *     tags: [Compositions]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the product whose compositions should be deleted
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     responses:
+ *       204:
+ *         description: All compositions successfully deleted
+ *       404:
+ *         description: Product or composition not found
  */
 
 /**
