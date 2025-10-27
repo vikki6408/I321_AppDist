@@ -195,7 +195,6 @@ const router = express.Router();
  */
 const createAndUpdateValidations = [
     body('name').isString().notEmpty().withMessage('name is required'),
-    body('ingredients').isArray().notEmpty().withMessage('ingredients is required'),
     body('imageUrl').optional().isString().isURL().withMessage('imageUrl must be a valid URL'),
     body('price').isFloat({ gt: 0 }).withMessage('price must be a positive number'),
 ];
