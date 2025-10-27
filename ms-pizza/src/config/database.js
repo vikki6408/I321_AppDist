@@ -14,26 +14,91 @@ const db = new sqlite3.Database(dbFile, (err) => {
     console.log('Connected to sqlite database:', dbFile);
 });
 
-
+// Enable foreign key enforcement for local integrity (only within this DB)
+db.run('PRAGMA foreign_keys = ON;');
 
 // Initialize ingredients table if not exists
 const initSql =`
-    CREATE TABLE IF NOT EXISTS pizzas (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL UNIQUE,
-        ingredients ARRAY NOT NULL,
-        imageUrl TEXT,
-        price REAL NOT NULL,
-        created_at TEXT DEFAULT (datetime('now')),
-        updated_at TEXT DEFAULT (datetime('now'))
-        )`;
+CREATE TABLE IF NOT EXISTS pizzas (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL UNIQUE,
+    imageUrl TEXT,
+    price REAL NULL,
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now'))
+);
 
+-- No real FK to productItems here (it’s managed by API validation)
+CREATE TABLE IF NOT EXISTS pizzas_compositions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pizza_id INTEGER NOT NULL,
+        ingredient_id INTEGER NOT NULL,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now')),
+        FOREIGN KEY (pizza_id) REFERENCES pizzas(id) ON DELETE CASCADE
+);
+`;
 
 db.serialize(() => {
     db.run(initSql, (err) => {
         if (err) {
             console.error('Failed to initialize database', err);
             process.exit(1);
+        }
+        console.log('Tables ensured.');
+    });
+
+    // Seed products only if empty
+    db.get('SELECT COUNT(*) AS count FROM pizzas', (err, row) => {
+        if (err) {
+            console.error('Error checking product count', err);
+            return;
+        }
+
+        if (row.count === 0) {
+            console.log('Seeding test data (pizzas)...');
+
+            const pizzaData = [
+                ['Margherita', 13.0],
+                ['Romana', 15.0],
+            ];
+
+            const insertPizzaSql = `INSERT INTO pizzas (name, imageUrl, price)
+                                VALUES (?, ?, ?)`;
+            const pizzaStmt = db.prepare(insertPizzaSql);
+
+            pizzaData.forEach(([name, imageUrl, price]) =>
+                pizzaStmt.run(name, imageUrl, price)
+            );
+
+            pizzaStmt.finalize(() => console.log('Seed data inserted.'));
+        } else {
+            console.log(`Database already contains ${row.count} products — skipping seed.`);
+        }
+    });
+
+    // Seed compositions only if empty
+    db.get('SELECT COUNT(*) AS count FROM pizzas_compositions', (err, row) => {
+        if (err) {
+            console.error('Error checking pizzas_compositions', err);
+            return;
+        }
+
+        if (row.count === 0) {
+            console.log('Seeding pizzas_compositions...');
+            const stmt = db.prepare(`
+            INSERT INTO pizzas_compositions (pizza_id, ingredient_id)
+            VALUES (?, ?)
+        `);
+
+            stmt.run(1, 1);
+            stmt.run(1, 2);
+
+            stmt.run(2, 1);
+            stmt.run(2, 2);
+            stmt.run(2, 3);
+
+            stmt.finalize(() => console.log('pizzas_compositions seeded.'));
         }
     });
 });

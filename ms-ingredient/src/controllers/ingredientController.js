@@ -85,14 +85,4 @@ exports.delete = async (req, res, next) => {
     }
 };
 
-exports.validateIngredients = async function(ingredientIds){
-    if (!Array.isArray(ingredientIds)) throw new Error('Les ingrédients doivent être un tableau d\'IDs');
-    const foundIngredients = await Promise.all(
-        ingredientIds.map(id => Ingredient.findById(id))
-    );
-    if (foundIngredients.some(ing => !ing)) {
-        throw new Error('Un ou plusieurs ingrédients sont invalides');
-    }
-};
-
 

@@ -111,10 +111,24 @@ const createAndUpdateValidations = [
     body('price').isFloat({ gt: 0 }).withMessage('price must be a positive number'),
 ];
 
+const createAndUpdateValidationsCompositions = [
+    body('pizza_id').isString().notEmpty().withMessage('product id is required'),
+    body('ingredient_id').isString().notEmpty().withMessage('item id is required'),
+];
+
+// ---------------- Pizza ----------------
 router.get('/', pizzaController.findAll);
 router.post('/', createAndUpdateValidations, pizzaController.create);
 router.get('/:id', [param('id').isInt().withMessage('id must be an integer')], pizzaController.findOne);
 router.put('/:id', [param('id').isInt().withMessage('id must be an integer'), ...createAndUpdateValidations], pizzaController.update);
 router.delete('/:id', [param('id').isInt().withMessage('id must be an integer')], pizzaController.delete);
+router.get('/:id/full', [param('id').isInt()], pizzaController.getPizzaWithIngredients);
+
+
+// ---------------- Ingredient ----------------
+router.get('/:id/ingredients',[param('id').isInt()], pizzaController.getCompositions);
+router.post('/:id/ingredients', createAndUpdateValidationsCompositions, pizzaController.addComposition);
+router.delete('/:id/ingredients', [param('id').isInt()], pizzaController.deleteCompositions);
+
 
 module.exports = router;

@@ -36,19 +36,6 @@ class Ingredient {
         });
     }
 
-
-    static findAllByIds(ingredient) {
-        for (const ingredient of ingredient) {
-            const sql = `SELECT * FROM ingredients WHERE id = ?`;
-            return new Promise((resolve, reject) => {
-                db.get(sql, [id], (err, row) => {
-                    if (err) return reject(err);
-                    resolve(row || null);
-                });
-            });
-        }
-    }
-
     static update(id, { name, price }) {
         const sql = `
             UPDATE ingredients
