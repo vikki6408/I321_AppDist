@@ -30,7 +30,8 @@ const PizzaController = {
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
-    },// POST /api/v1/products
+    },
+    // POST /api/v1/products
     async create(req, res) {
         try {
             const pizza = await PizzaService.create(req.body);
