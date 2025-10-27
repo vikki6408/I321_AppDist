@@ -1,5 +1,5 @@
 // entities/pizza.js
-const db = require('../../src/config/database');
+const db = require('../config/database');
 
 const Pizza = {
     findAll() {
@@ -78,7 +78,7 @@ const Pizza = {
         return new Promise((resolve, reject) => {
             db.run(
                 `INSERT INTO pizza_compositions (pizza_id, ingredient_id)
-         VALUES (?, ?, ?, ?)`,
+         VALUES (?, ?)`,
                 [pizzaId, ingredientId],
                 function (err) {
                     if (err) reject(err);

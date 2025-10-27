@@ -45,11 +45,13 @@ const router = express.Router();
  *             properties:
  *               name:
  *                 type: string
+ *               imageUrl:
+ *                 type: string
  *               price:
  *                 type: number
  *     responses:
  *       201:
- *         description: Product item
+ *         description: Pizza item
  *       400:
  *         description: Invalid input
  */
@@ -67,9 +69,9 @@ const router = express.Router();
  *           type: integer
  *     responses:
  *       200:
- *         description: A single product
+ *         description: A single pizza
  *       404:
- *         description: Product not found
+ *         description: Pizza not found
  *   put:
  *     summary: Update a pizza by ID
  *     parameters:
@@ -86,6 +88,8 @@ const router = express.Router();
  *             type: object
  *             properties:
  *               name:
+ *                 type: string
+ *               imageUrl:
  *                 type: string
  *               price:
  *                 type: number
@@ -121,7 +125,7 @@ const router = express.Router();
  *       - in: path
  *         name: id
  *         required: true
- *         description: Product ID
+ *         description: Pizza ID
  *         schema:
  *           type: integer
  *           example: 1
@@ -133,12 +137,12 @@ const router = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/ProductComposition'
+ *                 $ref: '#/components/schemas/PizzaComposition'
  *       '404':
- *         description: Product not found
+ *         description: Pizza not found
  *
  *   post:
- *     summary: Add a composition item to a product
+ *     summary: Add a composition ingredient to a pizza
  *     tags: [Compositions]
  *     parameters:
  *       - in: path
@@ -155,9 +159,9 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             properties:
- *               item_id:
+ *               ingredient_id:
  *                 type: integer
- *                 description: The ID of the product item to associate
+ *                 description: The ID of the pizza ingredient to associate
  *                 example: 2
  *     responses:
  *       201:
@@ -165,15 +169,15 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ProductComposition'
+ *               $ref: '#/components/schemas/PizzaComposition'
  *       400:
  *         description: Validation error or missing data
  *       404:
- *         description: Product or item not found
+ *         description: Pizza or ingredient not found
  *
  *
  *   delete:
- *     summary: Delete all composition items for a specific product
+ *     summary: Delete all composition ingredients for a specific pizza
  *     tags: [Compositions]
  *     parameters:
  *       - in: path
@@ -187,7 +191,7 @@ const router = express.Router();
  *       204:
  *         description: All compositions successfully deleted
  *       404:
- *         description: Product or composition not found
+ *         description: Pizza or composition not found
  */
 
 /**
@@ -200,8 +204,8 @@ const createAndUpdateValidations = [
 ];
 
 const createAndUpdateValidationsCompositions = [
-    body('pizza_id').isString().notEmpty().withMessage('product id is required'),
-    body('ingredient_id').isString().notEmpty().withMessage('item id is required'),
+    body('pizza_id').isString().notEmpty().withMessage('pizza id is required'),
+    body('ingredient_id').isString().notEmpty().withMessage('ingredient id is required'),
 ];
 
 // ---------------- Pizza ----------------
@@ -213,10 +217,10 @@ router.delete('/:id', [param('id').isInt().withMessage('id must be an integer')]
 router.get('/:id/full', [param('id').isInt()], pizzaController.getPizzaWithIngredients);
 
 
-// ---------------- Ingredient ----------------
-router.get('/:id/ingredients',[param('id').isInt()], pizzaController.getCompositions);
-router.post('/:id/ingredients', createAndUpdateValidationsCompositions, pizzaController.addComposition);
-router.delete('/:id/ingredients', [param('id').isInt()], pizzaController.deleteCompositions);
+// ---------------- Composition ----------------
+router.get('/:id/compositions',[param('id').isInt()], pizzaController.getCompositions);
+router.post('/:id/compositions', createAndUpdateValidationsCompositions, pizzaController.addComposition);
+router.delete('/:id/compositions', [param('id').isInt()], pizzaController.deleteCompositions);
 
 
 module.exports = router;

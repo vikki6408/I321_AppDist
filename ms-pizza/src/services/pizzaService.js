@@ -39,7 +39,7 @@ const PizzaService = {
 
         const ingredients = await Promise.all(
             compositions.map(async (comp) => {
-                const res = await fetch(`${PIZZA_INGREDIENT_SERVICE_URL}/api/v1/productItems/${comp.item_id}`);
+                const res = await fetch(`${PIZZA_INGREDIENT_SERVICE_URL}/api/v1/productItems/${comp.ingredient_id}`);
                 if (!res.ok) throw new Error(`PizzaItem ${comp.ingredient_id} not found`);
                 const ingredientData = await res.json();
                 return { ...ingredientData, quantity: comp.quantity, unit: comp.unit };
@@ -51,8 +51,8 @@ const PizzaService = {
 
     async addComposition(pizzaId, ingredient_id) {
         // Validate remote productItem via API
-        const response = await fetch(`${PIZZA_INGREDIENT_SERVICE_URL}/api/v1/productItems/${item_id}`);
-        if (!response.ok) throw new Error('Invalid pizzaItem ID');
+        const response = await fetch(`${PIZZA_INGREDIENT_SERVICE_URL}/api/v1/ingredients/${ingredient_id}`);
+        if (!response.ok) throw new Error('Invalid pizzaIngredient ID');
 
         return PizzaEntity.insertComposition(pizzaId, ingredient_id);
     },

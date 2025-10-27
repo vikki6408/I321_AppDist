@@ -5,11 +5,6 @@ const { validateIngredients } = require("../../../ms-ingredient/src/controllers/
 
 const PizzaService = require('../services/pizzaService');
 
-/**
- * Controller functions use Express (req, res) signatures and
- * respond with status codes matching MDN/HTTP recommendations.
- */
-
 const PizzaController = {
     // GET /api/v1/pizzas
     async findAll(req, res) {
