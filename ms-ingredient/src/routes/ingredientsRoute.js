@@ -7,7 +7,7 @@ const router = express.Router();
 
 /**
  * @openapi
- * /api/ingredients:
+ * /api/v1/ingredients:
  *   get:
  *     summary: Retrieve a list of ingredients
  *     responses:
@@ -38,7 +38,7 @@ const router = express.Router();
 
 /**
  * @openapi
- * /api/ingredients/{id}:
+ * /api/v1/ingredients/{id}:
  *   get:
  *     summary: Get an ingredient by ID
  *     parameters:
