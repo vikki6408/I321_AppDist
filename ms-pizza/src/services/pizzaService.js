@@ -39,14 +39,21 @@ const PizzaService = {
 
         const ingredients = await Promise.all(
             compositions.map(async (comp) => {
-                const res = await fetch(`${PIZZA_INGREDIENT_SERVICE_URL}/api/v1/productItems/${comp.ingredient_id}`);
+                const res = await fetch(`${PIZZA_INGREDIENT_SERVICE_URL}/api/v1/ingredients/${comp.ingredient_id}`);
                 if (!res.ok) throw new Error(`PizzaItem ${comp.ingredient_id} not found`);
                 const ingredientData = await res.json();
-                return { ...ingredientData, quantity: comp.quantity, unit: comp.unit };
+                return {
+                    ingredient_id: comp.ingredient_id,
+                    ingredient_name: ingredientData.name,
+                };
             })
         );
 
-        return { ...pizza, ingredients };
+        return {
+            pizza_id: pizza.id,
+            pizza_name: pizza.name,
+            ingredients
+        };
     },
 
     async addComposition(pizzaId, ingredient_id) {
