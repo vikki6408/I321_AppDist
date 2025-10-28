@@ -193,6 +193,72 @@ const router = express.Router();
  *       404:
  *         description: Pizza or composition not found
  *
+ *   put:
+ *     summary: Update or add an ingredient to a pizza
+ *     tags:
+ *       - Compositions
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the pizza
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - newIngredientId
+ *             properties:
+ *               oldIngredientId:
+ *                 type: integer
+ *                 description: Existing ingredient ID to replace (optional)
+ *                 example: 2
+ *               newIngredientId:
+ *                 type: integer
+ *                 description: New ingredient ID to insert or replace
+ *                 example: 3
+ *     responses:
+ *       200:
+ *         description: Ingredient updated or added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 pizzaId:
+ *                   type: integer
+ *                   example: 1
+ *                 oldIngredientId:
+ *                   type: integer
+ *                   nullable: true
+ *                   example: 2
+ *                 newIngredientId:
+ *                   type: integer
+ *                   example: 3
+ *       400:
+ *         description: Invalid input or ingredient not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Ingredient 3 not found
+ *       404:
+ *         description: Pizza not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: Pizza not found
  */
 
 /**
@@ -223,5 +289,6 @@ router.get('/:id/compositions',[param('id').isInt()], pizzaController.getComposi
 router.post('/:id/compositions', createAndUpdateValidationsCompositions, pizzaController.addComposition);
 router.delete('/:id/compositions', [param('id').isInt()], pizzaController.deleteCompositions);
 // PUT
+router.put('/:id/compositions', [param('id').isInt()], pizzaController.putCompositions);
 
 module.exports = router;

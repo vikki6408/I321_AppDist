@@ -68,6 +68,29 @@ const PizzaService = {
         return PizzaEntity.findCompositions(pizzaId);   // retourne le nom de l'ingredient aussi -> construire un dialogue avec car besoin du libelle et de l areponse
     },
 
+    async upsertComposition(pizzaId, oldIngredientId, newIngredientId) {
+        // Vérifie que la pizza existe
+        const pizza = await PizzaEntity.findById(pizzaId);
+        if (!pizza) return null;
+
+        // Vérifie que le nouvel ingrédient existe via le microservice
+        const response = await fetch(`${PIZZA_INGREDIENT_SERVICE_URL}/api/v1/ingredients/${newIngredientId}`);
+        if (!response.ok) throw new Error(`Ingredient ${newIngredientId} not found`);
+
+        // Vérifie si l'ancien ingrédient existe pour cette pizza
+        if (oldIngredientId) {
+            const existing = await PizzaEntity.findComposition2(pizzaId, oldIngredientId);
+            if (existing) {
+                // Met à jour
+                return PizzaEntity.updateComposition(pizzaId, oldIngredientId, newIngredientId);
+            }
+        }
+
+        // Sinon, insert le nouvel ingrédient
+        return PizzaEntity.insertComposition(pizzaId, newIngredientId);
+    },
+
+
     async deleteCompositions(id) {
         const existing = await PizzaEntity.findCompositions(id);
         if (!existing) return null;

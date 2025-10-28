@@ -95,6 +95,24 @@ const PizzaController = {
         }
     },
 
+    async putCompositions(req, res) {
+        try {
+            const { id } = req.params; // pizza id
+            const { oldIngredientId, newIngredientId } = req.body;
+
+            console.log("➡️ Updating composition for pizza:", id, { oldIngredientId, newIngredientId });
+
+            const updated = await PizzaService.upsertComposition(id, oldIngredientId, newIngredientId);
+
+            if (!updated) return res.status(404).json({ error: 'Pizza not found' });
+
+            res.json(updated);
+        } catch (error) {
+            console.error("❌ ERROR in putCompositions:", error);
+            res.status(500).json({ error: error.message });
+        }
+    },
+
     // GET /api/v1/products/:id/compositions
     async deleteCompositions(req, res) {
         try {

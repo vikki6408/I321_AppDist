@@ -74,6 +74,19 @@ const Pizza = {
         });
     },
 
+    findComposition2(pizzaId, ingredientId) {
+        return new Promise((resolve, reject) => {
+            db.get(
+                `SELECT * FROM pizza_compositions WHERE pizza_id = ? AND ingredient_id = ?`,
+                [pizzaId, ingredientId],
+                (err, row) => {
+                    if (err) reject(err);
+                    else resolve(row); // null si pas trouvé
+                }
+            );
+        });
+    },
+
     insertComposition(pizzaId, ingredientId) {
         return new Promise((resolve, reject) => {
             db.run(
@@ -83,6 +96,20 @@ const Pizza = {
                 function (err) {
                     if (err) reject(err);
                     else resolve({ id: this.lastID, pizzaId, ingredientId});
+                }
+            );
+        });
+    },
+
+    // Met à jour un ingredient existant
+    updateComposition(pizzaId, oldIngredientId, newIngredientId) {
+        return new Promise((resolve, reject) => {
+            db.run(
+                `UPDATE pizza_compositions SET ingredient_id = ? WHERE pizza_id = ? AND ingredient_id = ?`,
+                [newIngredientId, pizzaId, oldIngredientId],
+                function(err) {
+                    if (err) reject(err);
+                    else resolve({ pizzaId, oldIngredientId, newIngredientId });
                 }
             );
         });
